@@ -1,17 +1,43 @@
-# gestor_tareas_local
+# Gestor de tareas local
 
-A new Flutter project.
+Aplicación Flutter para administrar tareas con SQLite local.
 
-## Getting Started
+## Tecnología de persistencia elegida
 
-This project is a starting point for a Flutter application.
+Se usarán **Drift** y **drift_flutter** para guardar las tareas en SQLite.
 
-A few resources to get you started if this is your first Flutter project:
+`drift_dev` y `build_runner` generarán el código de la base de datos.
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
+Las tareas se consultarán con un `Stream` para actualizar la lista cuando cambie la base de datos.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Diseño de la tabla
+
+Tabla: `tareas`
+
+| Campo | Tipo en Drift | Representación en SQLite | Restricciones | Propósito |
+| --- | --- | --- | --- | --- |
+| `id` | `IntColumn` | `INTEGER` | Clave primaria autoincremental | Identificar cada tarea |
+| `titulo` | `TextColumn` | `TEXT` | Obligatorio | Guardar el título de la tarea |
+| `completada` | `BoolColumn` | `INTEGER` (`0` o `1`) | Obligatorio, valor inicial `false` | Indicar si la tarea está pendiente o completada |
+
+Cada tarea se identificará con un `id` entero autoincremental generado por SQLite.
+
+## Preparación
+
+```bash
+flutter pub get
+flutter devices
+flutter analyze
+flutter test
+flutter run -d chrome
+```
+
+El identificador `chrome` puede sustituirse por otro dispositivo mostrado por `flutter devices`.
+
+## Plataformas
+
+La aplicación se comprobará en:
+
+- Web.
+- Móvil.
+- Escritorio.
