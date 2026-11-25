@@ -5,6 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:gestor_tareas_local/data/database.dart';
 
 void main() {
+  // pruebas de persistencia
   test('la tarea permanece al cerrar y abrir la base', () async {
     final directory = await Directory.systemTemp.createTemp('gestor_tareas_');
     final file = File('${directory.path}/tareas.sqlite');

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../data/database.dart';
 
+// pantalla principal
 class TareasPage extends StatefulWidget {
   final AppDatabase database;
 
@@ -12,15 +13,18 @@ class TareasPage extends StatefulWidget {
 }
 
 class _TareasPageState extends State<TareasPage> {
+  // estado de la pantalla
   final TextEditingController _tituloController = TextEditingController();
   late final Stream<List<Tarea>> _tareas;
 
+  // carga inicial
   @override
   void initState() {
     super.initState();
     _tareas = widget.database.observarTareas();
   }
 
+  // alta
   Future<void> _agregarTarea() async {
     final titulo = _tituloController.text.trim();
     if (titulo.isEmpty) {
@@ -36,6 +40,7 @@ class _TareasPageState extends State<TareasPage> {
     }
   }
 
+  // cambio de estado
   Future<void> _alternarCompletada(Tarea tarea, bool completada) async {
     try {
       await widget.database.cambiarEstado(tarea.id, completada);
@@ -44,6 +49,7 @@ class _TareasPageState extends State<TareasPage> {
     }
   }
 
+  // edición
   Future<void> _editarTarea(Tarea tarea) async {
     var tituloEditado = tarea.titulo;
     final titulo = await showDialog<String>(
@@ -86,6 +92,7 @@ class _TareasPageState extends State<TareasPage> {
     }
   }
 
+  // eliminación
   Future<void> _eliminarTarea(Tarea tarea) async {
     try {
       await widget.database.eliminarTarea(tarea.id);
@@ -94,11 +101,13 @@ class _TareasPageState extends State<TareasPage> {
     }
   }
 
+  // mensajes
   void _mostrarMensaje(String mensaje) {
     ScaffoldMessenger.of(context)
         .showSnackBar(SnackBar(content: Text(mensaje)));
   }
 
+  // liberación de recursos
   @override
   void dispose() {
     _tituloController.dispose();
@@ -106,6 +115,7 @@ class _TareasPageState extends State<TareasPage> {
     super.dispose();
   }
 
+  // interfaz
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -115,6 +125,7 @@ class _TareasPageState extends State<TareasPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            // campo y botón de alta
             TextField(
               controller: _tituloController,
               decoration: const InputDecoration(
@@ -129,6 +140,7 @@ class _TareasPageState extends State<TareasPage> {
               label: const Text('Agregar tarea'),
             ),
             const SizedBox(height: 12),
+            // lista de tareas
             const Text('Mis tareas', style: TextStyle(fontSize: 18)),
             const SizedBox(height: 8),
             Expanded(

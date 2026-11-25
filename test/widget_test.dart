@@ -5,6 +5,7 @@ import 'package:gestor_tareas_local/data/database.dart';
 import 'package:gestor_tareas_local/main.dart';
 
 void main() {
+  // pruebas de interfaz
   testWidgets('la pantalla inicial se muestra sin errores', (tester) async {
     final database = AppDatabase(NativeDatabase.memory());
 

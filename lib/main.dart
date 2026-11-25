@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import 'data/database.dart';
 import 'screens/tareas_page.dart';
 
+// arranque de la aplicación
 void main() {
   runApp(GestorTareasApp(database: AppDatabase.open()));
 }
 
+// aplicación y tema
 class GestorTareasApp extends StatelessWidget {
   final AppDatabase database;
 
