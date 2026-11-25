@@ -4,11 +4,11 @@ Aplicación Flutter para administrar tareas con SQLite local.
 
 ## Tecnología de persistencia elegida
 
-Se usarán **Drift** y **drift_flutter** para guardar las tareas en SQLite.
+Se usan **Drift** y **drift_flutter** para guardar las tareas en SQLite.
 
-`drift_dev` y `build_runner` generarán el código de la base de datos.
+`drift_dev` y `build_runner` generan el código de la base de datos.
 
-Las tareas se consultarán con un `Stream` para actualizar la lista cuando cambie la base de datos.
+Las tareas se consultan con un `Stream` para actualizar la lista cuando cambia la base de datos.
 
 ## Diseño de la tabla
 
