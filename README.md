@@ -40,10 +40,10 @@ En web, Drift necesita dos archivos en `web/`: `sqlite3.wasm` y `drift_worker.js
 
 ## Pruebas automatizadas
 
-`flutter test` ejecuta 10 pruebas:
+`flutter test` ejecuta 11 pruebas:
 
 - `test/database_test.dart`: la tarea permanece al cerrar y abrir la base; las tres tareas permanecen; el título editado permanece; el estado completado permanece; la tarea eliminada no reaparece; eliminar por `id` no afecta a las demás.
-- `test/widget_test.dart`: crear y consultar una tarea; rechazar un título vacío; editar título, cambiar estado y eliminar; rechazar un título vacío al editar.
+- `test/widget_test.dart`: la pantalla inicial se muestra sin errores; crear y consultar una tarea; rechazar un título vacío; editar título, cambiar estado y eliminar; rechazar un título vacío al editar.
 
 ## Plataformas
 

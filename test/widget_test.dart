@@ -5,6 +5,21 @@ import 'package:gestor_tareas_local/data/database.dart';
 import 'package:gestor_tareas_local/main.dart';
 
 void main() {
+  testWidgets('la pantalla inicial se muestra sin errores', (tester) async {
+    final database = AppDatabase(NativeDatabase.memory());
+
+    await tester.pumpWidget(GestorTareasApp(database: database));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Gestor de tareas'), findsOneWidget);
+    expect(find.text('Agregar tarea'), findsOneWidget);
+    expect(find.byType(TextField), findsOneWidget);
+    expect(find.text('Todavía no hay tareas guardadas'), findsOneWidget);
+
+    await tester.pumpWidget(const SizedBox.shrink());
+    await tester.pump(const Duration(milliseconds: 1));
+  });
+
   testWidgets('permite crear y consultar una tarea', (tester) async {
     final database = AppDatabase(NativeDatabase.memory());
 
