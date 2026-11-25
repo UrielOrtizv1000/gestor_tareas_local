@@ -13,7 +13,16 @@ class Tareas extends Table {
 class AppDatabase extends _$AppDatabase {
   AppDatabase(super.executor);
 
-  AppDatabase.open() : super(driftDatabase(name: 'tareas'));
+  AppDatabase.open()
+    : super(
+        driftDatabase(
+          name: 'tareas',
+          web: DriftWebOptions(
+            sqlite3Wasm: Uri.parse('sqlite3.wasm'),
+            driftWorker: Uri.parse('drift_worker.js'),
+          ),
+        ),
+      );
 
   @override
   int get schemaVersion => 1;
