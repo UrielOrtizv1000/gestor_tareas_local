@@ -1,1 +1,2 @@
 *.wasm binary
+web/drift_worker.js -text
