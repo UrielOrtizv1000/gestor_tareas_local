@@ -22,28 +22,76 @@ class _TareasPageState extends State<TareasPage> {
   }
 
   Future<void> _agregarTarea() async {
+    final titulo = _tituloController.text.trim();
+    if (titulo.isEmpty) {
+      _mostrarMensaje('Error: título vacío');
+      return;
+    }
+
     try {
-      await widget.database.crearTarea(_tituloController.text);
+      await widget.database.crearTarea(titulo);
       _tituloController.clear();
     } catch (_) {
-      _mostrarMensaje('No se pudo guardar la tarea');
+      _mostrarMensaje('Error al guardar');
     }
   }
 
-  void _alternarCompletada(Tarea tarea, bool completada) {
-    _pendiente('Implementar actualización de tarea');
+  Future<void> _alternarCompletada(Tarea tarea, bool completada) async {
+    try {
+      await widget.database.cambiarEstado(tarea.id, completada);
+    } catch (_) {
+      _mostrarMensaje('Error al cambiar estado');
+    }
   }
 
-  void _editarTarea(Tarea tarea) {
-    _pendiente('Implementar edición de título');
+  Future<void> _editarTarea(Tarea tarea) async {
+    var tituloEditado = tarea.titulo;
+    final titulo = await showDialog<String>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Editar tarea'),
+          content: TextFormField(
+            initialValue: tarea.titulo,
+            autofocus: true,
+            onChanged: (valor) => tituloEditado = valor,
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Cancelar'),
+            ),
+            FilledButton(
+              onPressed: () => Navigator.pop(context, tituloEditado.trim()),
+              child: const Text('Guardar'),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (!mounted || titulo == null) {
+      return;
+    }
+
+    if (titulo.isEmpty) {
+      _mostrarMensaje('Error al editar');
+      return;
+    }
+
+    try {
+      await widget.database.editarTarea(tarea.id, titulo);
+    } catch (_) {
+      _mostrarMensaje('Error al editar');
+    }
   }
 
-  void _eliminarTarea(Tarea tarea) {
-    _pendiente('Implementar eliminación de tarea');
-  }
-
-  void _pendiente(String mensaje) {
-    _mostrarMensaje(mensaje);
+  Future<void> _eliminarTarea(Tarea tarea) async {
+    try {
+      await widget.database.eliminarTarea(tarea.id);
+    } catch (_) {
+      _mostrarMensaje('Error al eliminar');
+    }
   }
 
   void _mostrarMensaje(String mensaje) {
@@ -88,9 +136,7 @@ class _TareasPageState extends State<TareasPage> {
                 stream: _tareas,
                 builder: (context, snapshot) {
                   if (snapshot.hasError) {
-                    return const Center(
-                      child: Text('No se pudieron cargar las tareas'),
-                    );
+                    return const Center(child: Text('Error al cargar'));
                   }
 
                   if (!snapshot.hasData) {

@@ -23,4 +23,58 @@ void main() {
     await secondDatabase.close();
     await directory.delete(recursive: true);
   });
+
+  test('el título editado permanece al reabrir la base', () async {
+    final directory = await Directory.systemTemp.createTemp('gestor_tareas_');
+    final file = File('${directory.path}/tareas.sqlite');
+
+    final firstDatabase = AppDatabase(NativeDatabase(file));
+    final id = await firstDatabase.crearTarea('Título anterior');
+    await firstDatabase.editarTarea(id, 'Título nuevo');
+    await firstDatabase.close();
+
+    final secondDatabase = AppDatabase(NativeDatabase(file));
+    final tareas = await secondDatabase.observarTareas().first;
+
+    expect(tareas.single.titulo, 'Título nuevo');
+
+    await secondDatabase.close();
+    await directory.delete(recursive: true);
+  });
+
+  test('el estado completado permanece al reabrir la base', () async {
+    final directory = await Directory.systemTemp.createTemp('gestor_tareas_');
+    final file = File('${directory.path}/tareas.sqlite');
+
+    final firstDatabase = AppDatabase(NativeDatabase(file));
+    final id = await firstDatabase.crearTarea('Cambiar estado');
+    await firstDatabase.cambiarEstado(id, true);
+    await firstDatabase.close();
+
+    final secondDatabase = AppDatabase(NativeDatabase(file));
+    final tareas = await secondDatabase.observarTareas().first;
+
+    expect(tareas.single.completada, isTrue);
+
+    await secondDatabase.close();
+    await directory.delete(recursive: true);
+  });
+
+  test('la tarea eliminada no reaparece al reabrir la base', () async {
+    final directory = await Directory.systemTemp.createTemp('gestor_tareas_');
+    final file = File('${directory.path}/tareas.sqlite');
+
+    final firstDatabase = AppDatabase(NativeDatabase(file));
+    final id = await firstDatabase.crearTarea('Eliminar tarea');
+    await firstDatabase.eliminarTarea(id);
+    await firstDatabase.close();
+
+    final secondDatabase = AppDatabase(NativeDatabase(file));
+    final tareas = await secondDatabase.observarTareas().first;
+
+    expect(tareas, isEmpty);
+
+    await secondDatabase.close();
+    await directory.delete(recursive: true);
+  });
 }

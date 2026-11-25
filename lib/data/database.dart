@@ -22,6 +22,22 @@ class AppDatabase extends _$AppDatabase {
     return into(tareas).insert(TareasCompanion.insert(titulo: titulo));
   }
 
+  Future<int> editarTarea(int id, String titulo) {
+    return (update(tareas)..where((tarea) => tarea.id.equals(id))).write(
+      TareasCompanion(titulo: Value(titulo)),
+    );
+  }
+
+  Future<int> cambiarEstado(int id, bool completada) {
+    return (update(tareas)..where((tarea) => tarea.id.equals(id))).write(
+      TareasCompanion(completada: Value(completada)),
+    );
+  }
+
+  Future<int> eliminarTarea(int id) {
+    return (delete(tareas)..where((tarea) => tarea.id.equals(id))).go();
+  }
+
   Stream<List<Tarea>> observarTareas() {
     return select(tareas).watch();
   }
